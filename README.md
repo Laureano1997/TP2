@@ -17,9 +17,12 @@ El sistema deberá activar un sistema de riego en caso de ser necesario, compara
 
 La cantidad de agua en el tanque, la temperatura, y la humedad del suelo serán enviados via UART a la computadora cada una hora para poder realizar el monitoreo remoto y obtener estadísticas.
 
-Se agregó a este sistema un display LCD de 16x2 que indicará el estado del tanque y la temperatura del recinto.
+Se agregó a este sistema un display LCD de 16x2 conectado mediante I2C que indicará el estado del tanque y la temperatura del recinto.
 
 En caso de quedarse sin agua, el sistema encenderá un LED indicando que el sistema no tiene agua, sin embargo si luego de 1 hora no se recarga el agua en el tanque comenzará a sonar un buzzer, enviará un mensaje de alerta al display y otro a la computadora indicando que el sistema está bloqueado por falta de agua.
+
+### Imagenes y videos del sistema implementado:
+https://drive.google.com/drive/folders/1I_2PlFF_FoShoL4chuT25EDY5dH3-PB-?usp=sharing
 
 # Periféricos a utilizar:
 
@@ -32,3 +35,7 @@ En caso de quedarse sin agua, el sistema encenderá un LED indicando que el sist
 -LED de alerta por falta de agua
 
 -Buzzer
+
+-Display LCD 16x2
+
+-PCF8574
