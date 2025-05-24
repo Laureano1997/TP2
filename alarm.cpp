@@ -32,6 +32,7 @@ static bool waterSensorState = ON;
 static bool alarmLEDState = OFF;
 static bool alarmBuzzerState = OFF;
 static bool timeReset = OFF;
+static status_t systemStatus = NORMAL_WORKING;
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -79,22 +80,24 @@ void alarmUpdate()
     accumulatedTimeAlarm = accumulatedTimeAlarm + SYSTEM_TIME_INCREMENT_MS;
     
     if(resetButtonRead()){
-        alarmBuzzerState = OFF;
-        timeReset = OFF;
+        alarmBuzzerState = OFF; //Al Switch
+        timeReset = OFF;    //Al Switch
+        systemStatus = NORMAL_WORKING;
     }
 
     waterSensorState = waterSensorRead();
 
     if(!waterSensorState){
         alarmLEDState = ON;
-        irrigationValveState = ON;
+        systemStatus = EMPTY_TANK;
+        irrigationValveState = OFF;
     }
     else{
         alarmLEDState = OFF;
         if(soilMoistureSensorRead())
-            irrigationValveState = ON;
-        else
             irrigationValveState = OFF;
+        else
+            irrigationValveState = ON;
     }
 
     irrigationValveWrite(irrigationValveState);
@@ -109,8 +112,10 @@ void alarmUpdate()
         emptyWaterLED = OFF;
     }
 
-    if(emptyWaterLED && accumulatedTimeAlarm > ALARM_BUZZ_ACTIVATION_TIME)
+    if(emptyWaterLED && accumulatedTimeAlarm > ALARM_BUZZ_ACTIVATION_TIME){
+        systemStatus = SYSTEM_BLOCKED;
         alarmBuzzerState = ON;
+    }
 
     if(!emptyWaterLED && !alarmBuzzerState)
         accumulatedTimeAlarm = 0;
@@ -122,8 +127,14 @@ void alarmUpdate()
         }
     } else {
         emptyWaterBuzzer = OFF;
+        systemStatus = EMPTY_TANK;
     }
 }
+
+status_t alarmSystemStatus(){
+    return systemStatus;
+}
+
 
 //=====[Implementations of private functions]==================================
 

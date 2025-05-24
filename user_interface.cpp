@@ -24,6 +24,9 @@ DigitalOut systemBlockedLed(LED2);
 //=====[Declaration and initialization of private global variables]============
 
 static bool systemBlockedState = OFF;
+static char degreeSymbol[2] = {0xFC, '\0'};
+static status_t systemStatus = NORMAL_WORKING;
+
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -47,12 +50,6 @@ void userInterfaceUpdate()
 static void userInterfaceDisplayInit()
 {
     displayInit( DISPLAY_CONNECTION_I2C_PCF8574_IO_EXPANDER );
-     
-    displayCharPositionWrite ( 0,0 );
-    displayStringWrite( "Temperatura:" );
-
-    displayCharPositionWrite ( 0,1 );
-    displayStringWrite( "Tanque: " );
 }
 
 static void userInterfaceDisplayUpdate()
@@ -65,34 +62,55 @@ static void userInterfaceDisplayUpdate()
 
         accumulatedDisplayTime = 0;
 
-        if(alarmBuzzerStateRead()){
-            displayClearScreen();
-            displayCharPositionWrite( 5,0 );
-            displayStringWrite( "ALERTA" );
-            displayCharPositionWrite(2, 1);
-            displayStringWrite( "TANQUE VACIO" );
-        }else{
-            displayCharPositionWrite ( 0,0 );
-            displayStringWrite( "Temperatura" );
+        switch (alarmSystemStatus()){
+            case NORMAL_WORKING:
+                displayCharPositionWrite ( 0,0 );
+                displayStringWrite( "Temperatura" );
 
-            displayCharPositionWrite ( 0,1 );
-            displayStringWrite( "Tanque  " );
+                displayCharPositionWrite ( 0,1 );
+                displayStringWrite( "Tanque  " );
 
-            floatToStr(temperatureString, temperatureSensorReadCelsius());
-            displayCharPositionWrite ( 11,0 );
-            displayStringWrite( temperatureString );
-            displayCharPositionWrite ( 14,0 );
-            displayStringWrite( "'C" );
+                floatToStr(temperatureString, temperatureSensorReadCelsius());
+                displayCharPositionWrite ( 11,0 );
+                displayStringWrite( temperatureString );
+                displayCharPositionWrite ( 14,0 );
+                displayStringWrite(degreeSymbol);
+                displayCharPositionWrite ( 15,0 );
+                displayStringWrite( "C" );
 
-            displayCharPositionWrite( 8,1 );
-            displayStringWrite( "        " );
-            displayCharPositionWrite ( 8,1 );
-        
-            if ( waterSensorRead() ) {
+                displayCharPositionWrite( 8,1 );
+                displayStringWrite( "        " );
+                displayCharPositionWrite ( 8,1 );
                 displayStringWrite( "Lleno" );
-            } else {
+                break;
+            case EMPTY_TANK:
+                displayCharPositionWrite ( 0,0 );
+                displayStringWrite( "Temperatura" );
+
+                displayCharPositionWrite ( 0,1 );
+                displayStringWrite( "Tanque  " );
+
+                floatToStr(temperatureString, temperatureSensorReadCelsius());
+                displayCharPositionWrite ( 11,0 );
+                displayStringWrite( temperatureString );
+                displayCharPositionWrite ( 14,0 );
+                displayStringWrite(degreeSymbol);
+                displayCharPositionWrite ( 15,0 );
+                displayStringWrite( "C" );
+
+                displayCharPositionWrite( 8,1 );
+                displayStringWrite( "        " );
+                displayCharPositionWrite ( 8,1 );
                 displayStringWrite( "Vacio" );
-            }
+                break;
+            case SYSTEM_BLOCKED:
+                displayClearScreen();
+                displayCharPositionWrite( 5,0 );
+                displayStringWrite( "ALERTA" );
+                displayCharPositionWrite(2, 1);
+                displayStringWrite( "TANQUE VACIO" );
+            default:
+                break;
         }
     } else {
         accumulatedDisplayTime =
