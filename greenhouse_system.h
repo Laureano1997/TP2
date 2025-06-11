@@ -9,13 +9,21 @@
 #define STATUS_MESSAGE "La temperatura del recinto es de: "             //Mensaje que acompaña la temperatura del recinto
 #define CELSIUS_DEGREES "°C\n"
 #define SYSTEM_TIME_INCREMENT_MS   10
+#define BUZZ_ACTIVATION_TIME 10000
 
 //=====[Declaration of public data types]======================================
+
+typedef enum{
+    NORMAL_WORKING,
+    EMPTY_TANK,
+    SYSTEM_BLOCKED
+}status_t;
 
 //=====[Declarations (prototypes) of public functions]=========================
 
 void greenhouseSystemInit();
 void greenhouseSystemUpdate();
+status_t greenhouseSystemStatusRead();
 
 //=====[#include guards - end]=================================================
 
