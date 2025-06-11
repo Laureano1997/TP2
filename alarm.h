@@ -10,6 +10,12 @@
 
 //=====[Declaration of public data types]======================================
 
+typedef enum{
+    NORMAL_WORKING,
+    EMPTY_TANK,
+    SYSTEM_BLOCKED
+}status_t;
+
 //=====[Declarations (prototypes) of public functions]=========================
 
 void alarmInit();
@@ -18,6 +24,7 @@ bool alarmBuzzerStateRead();
 void alarmLEDStateWrite( bool state );
 void alarmBuzzerStateWrite( bool state );
 void alarmUpdate();
+status_t alarmSystemStatus();
 
 //=====[#include guards - end]=================================================
 
