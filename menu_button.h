@@ -1,24 +1,20 @@
 //=====[#include guards - begin]===============================================
 
-#ifndef _ALARM_H_
-#define _ALARM_H_
+#ifndef _MENU_BUTTON_H_
+#define _MENU_BUTTON_H_
 
 //=====[Declaration of public defines]=========================================
 
-#define ALARM_BUZZ_ACTIVATION_TIME 10000
-#define ALARM_BUZZ_TIME 500     //Mitad del período de el buzzer
+#define DEBOUNCE_BUTTON_TIME_MS   40  
 
 //=====[Declaration of public data types]======================================
 
 //=====[Declarations (prototypes) of public functions]=========================
 
-void alarmInit();
-bool alarmLEDStateRead();
-bool alarmBuzzerStateRead();
-void alarmLEDStateWrite( bool state );
-void alarmBuzzerStateWrite( bool state );
-void alarmUpdate();
+void menuButtonInit();
+void menuButtonUpdate();
+bool menuButtonRead();
 
 //=====[#include guards - end]=================================================
 
-#endif // _ALARM_H_
+#endif // _MENU_BUTTON_H_

@@ -1,13 +1,9 @@
 //=====[Libraries]=============================================================
 
+#include "mbed.h"
 #include "arm_book_lib.h"
 
-#include "greenhouse_system.h"
-
-#include "alarm.h"
-#include "user_interface.h"
-#include "pc_serial_com.h"
-#include "light_control.h"
+#include "menu_button.h"
 
 //=====[Declaration of private defines]========================================
 
@@ -15,49 +11,40 @@
 
 //=====[Declaration and initialization of public global objects]===============
 
+DigitalIn  menuButton(D1);        //Botón de Menu para cambiar el menú
+
 //=====[Declaration of external public global variables]=======================
 
 //=====[Declaration and initialization of public global variables]=============
 
 //=====[Declaration and initialization of private global variables]============
 
-static status_t systemStatus = NORMAL_WORKING;
-
 //=====[Declarations (prototypes) of private functions]========================
-static void systemStatusUpdate();
+static bool _menuButtonRead();
 
 //=====[Implementations of public functions]===================================
 
-void greenhouseSystemInit()
+void menuButtonInit()
 {
-    lightControlInit();
-    userInterfaceInit();
-    alarmInit();
-    pcSerialComInit();
+    menuButton.mode(PullDown);
 }
 
-void greenhouseSystemUpdate()
+void menuButtonUpdate()
 {
-    lightControlUpdate();
-    alarmUpdate();
-    systemStatusUpdate();
-    userInterfaceUpdate();
-
-    pcSerialComUpdate();
-    delay(SYSTEM_TIME_INCREMENT_MS);
 }
 
-status_t greenhouseSystemStatusRead(){
-    return systemStatus;
+bool menuButtonRead()
+{
+    return _menuButtonRead();
 }
 
 //=====[Implementations of private functions]==================================
-static void systemStatusUpdate(){
-    if(alarmBuzzerStateRead()){
-        systemStatus = SYSTEM_BLOCKED;
-    }else if(alarmLEDStateRead()){
-        systemStatus = EMPTY_TANK;
-    }else{
-        systemStatus = NORMAL_WORKING;
+
+static bool _menuButtonRead(){
+    if(menuButton.read()){
+        delay(DEBOUNCE_BUTTON_TIME_MS);
+        if(menuButton.read())
+            return ON;
     }
+    return OFF;
 }

@@ -7,9 +7,9 @@
 #include "greenhouse_system.h"
 #include "water_sensor.h"
 #include "temperature_sensor.h"
-#include "reset_button.h"
 #include "soil_moisture_sensor.h"
 #include "irrigation_valve.h"
+#include "reset_button.h"
 
 
 //=====[Declaration of private defines]========================================
@@ -32,7 +32,6 @@ static bool waterSensorState = ON;
 static bool alarmLEDState = OFF;
 static bool alarmBuzzerState = OFF;
 static bool timeReset = OFF;
-static status_t systemStatus = NORMAL_WORKING;
 
 //=====[Declarations (prototypes) of private functions]========================
 
@@ -42,7 +41,6 @@ void alarmInit()
 {
     waterSensorInit();
     temperatureSensorInit();
-    resetButtonInit();
     soilMoistureSensorInit();
     irrigationValveInit();
     emptyWaterLED = OFF;
@@ -76,20 +74,19 @@ void alarmUpdate()
     soilMoistureSensorUpdate();
     irrigationValveUpdate();
 
-    static int accumulatedTimeAlarm = 0;
+    static int accumulatedTimeAlarm;
     accumulatedTimeAlarm = accumulatedTimeAlarm + SYSTEM_TIME_INCREMENT_MS;
+
     
     if(resetButtonRead()){
-        alarmBuzzerState = OFF; //Al Switch
-        timeReset = OFF;    //Al Switch
-        systemStatus = NORMAL_WORKING;
+        alarmBuzzerState = OFF; 
+        timeReset = OFF;    
     }
 
     waterSensorState = waterSensorRead();
 
     if(!waterSensorState){
         alarmLEDState = ON;
-        systemStatus = EMPTY_TANK;
         irrigationValveState = OFF;
     }
     else{
@@ -113,7 +110,6 @@ void alarmUpdate()
     }
 
     if(emptyWaterLED && accumulatedTimeAlarm > ALARM_BUZZ_ACTIVATION_TIME){
-        systemStatus = SYSTEM_BLOCKED;
         alarmBuzzerState = ON;
     }
 
@@ -127,14 +123,8 @@ void alarmUpdate()
         }
     } else {
         emptyWaterBuzzer = OFF;
-        systemStatus = EMPTY_TANK;
     }
 }
-
-status_t alarmSystemStatus(){
-    return systemStatus;
-}
-
 
 //=====[Implementations of private functions]==================================
 

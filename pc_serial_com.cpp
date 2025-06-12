@@ -10,7 +10,6 @@
 #include "water_sensor.h"
 #include "irrigation_valve.h"
 #include "soil_moisture_sensor.h"
-#include "event_log.h"
 
 //=====[Declaration of private defines]========================================
 
@@ -43,8 +42,6 @@ static bool alertMsgSent = OFF;
 
 static void pcSerialComStringRead( char* str, int strLength );
 
-static void commandShowStoredEvents();
-
 //=====[Implementations of public functions]===================================
 
 void pcSerialComInit()
@@ -65,6 +62,10 @@ void pcSerialComInit()
     else
         pcSerialComStringWrite( "Estado del suelo: Seco\r\n" );
 
+    if(irrigationValveRead())
+        pcSerialComStringWrite( "Estado de la electroválvula de riego: Encendida\r\n" );
+    else
+        pcSerialComStringWrite( "Estado de la electroválvula de riego: Apagada\r\n" );
     pcSerialComStringWrite("\r\n");
 }
 
@@ -101,15 +102,4 @@ static void pcSerialComStringRead( char* str, int strLength )
         uartUsb.write( &str[strIndex] ,1 );
     }
     str[strLength]='\0';
-}
-
-static void commandShowStoredEvents()
-{
-    char str[EVENT_STR_LENGTH] = "";
-    int i;
-    for (i = 0; i < eventLogNumberOfStoredEvents(); i++) {
-        eventLogRead( i, str );
-        pcSerialComStringWrite( str );   
-        pcSerialComStringWrite( "\r\n" );                    
-    }
 }
