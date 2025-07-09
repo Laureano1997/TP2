@@ -10,6 +10,7 @@
 #include "menu_button.h"
 #include "soil_moisture_sensor.h"
 #include "irrigation_valve.h"
+#include "date_and_time.h"
 
 //=====[Declaration of private defines]========================================
 #define DISPLAY_REFRESH_TIME_MS 1000
@@ -20,6 +21,7 @@ typedef enum{
     SYSTEM_DESCRIPTION,
     DISPLAY_BIO_DATA,
     SYSTEM_DATA,
+    SYSTEM_TIME,
 }interfaceState_t;
 
 //=====[Declaration and initialization of public global objects]===============
@@ -70,7 +72,7 @@ static void userInterfaceMatrixKeypadUpdate(){
         printed=false;
         while(menuButtonRead()==ON);
     }
-    if(i == 3){
+    if(i == 4){
         i=0;
     }
     switch (i){
@@ -82,6 +84,9 @@ static void userInterfaceMatrixKeypadUpdate(){
             break;
         case 2:
             interfaceState = SYSTEM_DATA;
+            break;
+        case 3:
+            interfaceState = SYSTEM_TIME;
             break;
         default:
             interfaceState = SYSTEM_DESCRIPTION;
@@ -153,6 +158,16 @@ static void userInterfaceDisplayUpdate()
                         displayCharPositionWrite ( 8,1 );
                         displayStringWrite( "Lleno" );
                         break;
+                    case SYSTEM_TIME:
+                        if(!printed){
+                            displayClearScreen();
+                            displayCharPositionWrite ( 2,0 );
+                            displayStringWrite( "Hora y Fecha" );
+                            printed = true;
+                        }
+                        displayCharPositionWrite ( 1,1 );
+                        displayStringWrite( dateAndTimeRead() );
+                        break;
                     default:
                         displayClearScreen();
                         break;
@@ -199,6 +214,16 @@ static void userInterfaceDisplayUpdate()
                         printTemperature();
                         displayCharPositionWrite ( 8,1 );
                         displayStringWrite( "Vacio" );
+                        break;
+                    case SYSTEM_TIME:
+                        if(!printed){
+                            displayClearScreen();
+                            displayCharPositionWrite ( 2,0 );
+                            displayStringWrite( "Hora y Fecha" );
+                            printed = true;
+                        }
+                        displayCharPositionWrite ( 1,1 );
+                        displayStringWrite( dateAndTimeRead() );
                         break;
                     default:
                         displayClearScreen();

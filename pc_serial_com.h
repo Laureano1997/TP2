@@ -11,6 +11,7 @@
 
 //=====[Declarations (prototypes) of public functions]=========================
 
+char pcSerialComCharRead();
 void pcSerialComInit();
 void pcSerialComStringWrite( const char* str );
 void pcSerialComUpdate();

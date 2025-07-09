@@ -11,7 +11,7 @@
 
 //=====[Declaration and initialization of public global objects]===============
 
-DigitalIn  menuButton(D1);        //Botón de Menu para cambiar el menú
+DigitalIn  menuButton(D7);        //Botón de Menu para cambiar el menú
 
 //=====[Declaration of external public global variables]=======================
 
