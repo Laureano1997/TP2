@@ -8,6 +8,7 @@
 #include "user_interface.h"
 #include "pc_serial_com.h"
 #include "light_control.h"
+#include "ble_com.h"
 
 //=====[Declaration of private defines]========================================
 
@@ -38,12 +39,13 @@ void greenhouseSystemInit()
 
 void greenhouseSystemUpdate()
 {
-    lightControlUpdate();
+//    lightControlUpdate();
     alarmUpdate();
     systemStatusUpdate();
     userInterfaceUpdate();
 
     pcSerialComUpdate();
+    bleComUpdate();
     delay(SYSTEM_TIME_INCREMENT_MS);
 }
 

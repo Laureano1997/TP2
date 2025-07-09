@@ -1,20 +1,23 @@
 //=====[#include guards - begin]===============================================
 
-#ifndef _LIGHT_CONTROL_H_
-#define _LIGHT_CONTROL_H_
-
-//=====[Libraries]=============================================================
+#ifndef _BLE_COM
+#define _BLE_COM
 
 //=====[Declaration of public defines]=========================================
 
+#define BLE_UPDATE_TIME 1000
+
 //=====[Declaration of public data types]======================================
+
+//char timeStr[16];
 
 //=====[Declarations (prototypes) of public functions]=========================
 
-void lightControlInit();
-void lightControlUpdate(float dutyCycle);
-int lightControlRead();
+void bleComUpdate();
+char* bleComRead();
+
+void bleComWrite(const char * str);
 
 //=====[#include guards - end]=================================================
 
-#endif // _LIGHT_CONTROL_H_
+#endif // _BLE_COM

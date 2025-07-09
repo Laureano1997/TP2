@@ -32,8 +32,8 @@ void lightControlInit()
     setDutyCycle( 0.5f );
 }
 
-void lightControlUpdate(){
-    setDutyCycle(reference.read());
+void lightControlUpdate(float dutyCycle){
+    setDutyCycle(dutyCycle);
 }
 
 int lightControlRead(){

@@ -217,3 +217,9 @@ A continuación, se detallan algunos casos de uso:
 | 28 de junio          | Video del sistema funcionando. |
 | 5 de julio          | Informe final del proyecto. |  
 
+### Actualización y Video del sistema
+
+En el siguiente Link puede observarse el sistema con el módulo bluetooth integrado.
+Los datos mostrados via BlueTooth son la hora y fecha junto al estado del agua en el tanque y la humedad en el suelo. No la electroválvula de salida como se indica en el video.
+
+[Sistema de Riego Automático](https://drive.google.com/file/d/1rl8nGWudtGlgNvqPIWfrOqiguwOLjSJ-/view?usp=sharing)
